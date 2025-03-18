@@ -16,20 +16,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
+
 @Configuration
 public class AppConfig {
 
     @Autowired
-     UserRepository userRepository;
+    UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                Optional<User> optional=  userRepository.findByUsername(username);
-                if(optional.isEmpty()) {
-                   throw  new BaseExcaption(new ErrorMessage(MessageType.USERNAME_NOT_FOUND,username));
+                Optional<User> optional = userRepository.findByUsername(username);
+                if (optional.isEmpty()) {
+                    throw new BaseExcaption(new ErrorMessage(MessageType.USERNAME_NOT_FOUND, username));
                 }
                 return optional.get();
             }
@@ -43,14 +44,13 @@ public class AppConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
 
 
-
         return authenticationProvider;
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 
 }
